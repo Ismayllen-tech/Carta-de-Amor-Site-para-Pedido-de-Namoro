@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carta para Você 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --cream: #f5ede0;
+      --parchment: #e8d5b7;
+      --parchment-dark: #d4bc95;
+      --rose: #c0717a;
+      --deep-rose: #8b3a45;
+      --burgundy: #5c1a2a;
+      --gold: #c9a84c;
+      --warm-white: #fdf8f2;
+      --ink: #2d1a0e;
+      --ink-light: #4a2e1a;
+    }
+ 
+    body {
+      min-height: 100vh;
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      font-family: 'Cormorant Garamond', serif;
+      padding: 3rem 1rem 4rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+ 
+    /* Grain texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+ 
+    /* Petals */
+    .petals-bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+    .petal { position: absolute; top: -40px; animation: fall linear infinite; opacity: 0.35; }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg) translateX(30px); }
+    }
+ 
+    /* Page entry */
+    .page-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 680px;
+      animation: slideUp 0.9s cubic-bezier(0.22,1,0.36,1) forwards;
+      opacity: 0;
+    }
+ 
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+ 
+    /* Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+ 
+    .page-header .tagline {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 0.6rem;
+    }
+ 
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      color: var(--burgundy);
+    }
+ 
+    /* Letter paper */
+    .letter {
+      background: var(--warm-white);
+      border-radius: 2px;
+      padding: 3.5rem 3rem 3rem;
+      position: relative;
+      box-shadow:
+        0 4px 6px rgba(92,26,42,0.06),
+        0 20px 60px rgba(92,26,42,0.12),
+        inset 0 0 0 1px rgba(201,168,76,0.15);
+    }
+ 
+    /* Ruled lines */
+    .letter::after {
+      content: '';
+      position: absolute;
+      inset: 3.5rem 3rem 3rem;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent calc(1.9em - 1px),
+        rgba(201,168,76,0.15) calc(1.9em - 1px),
+        rgba(201,168,76,0.15) 1.9em
+      );
+      background-size: 100% 1.9em;
+      background-position: 0 0.1em;
+      pointer-events: none;
+      z-index: 0;
+    }
+ 
+    /* Red margin line */
+    .letter::before {
+      content: '';
+      position: absolute;
+      top: 3.5rem;
+      bottom: 3rem;
+      left: 4.2rem;
+      width: 1px;
+      background: rgba(192,113,122,0.25);
+      z-index: 1;
+    }
+ 
+    /* Top decorative wax seal */
+    .wax-seal {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 44px;
+      background: radial-gradient(circle at 35% 35%, var(--rose), var(--burgundy));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px rgba(92,26,42,0.3);
+      z-index: 3;
+    }
+ 
+    .letter-content {
+      position: relative;
+      z-index: 2;
+      line-height: 1.9em;
+    }
+ 
+    .letter-date {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1rem;
+      color: var(--ink-light);
+      text-align: right;
+      margin-bottom: 1.8em;
+      opacity: 0.7;
+    }
+ 
+    .letter-salutation {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.55rem;
+      color: var(--deep-rose);
+      margin-bottom: 1em;
+    }
+ 
+    .letter-body p {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      color: var(--ink);
+      margin-bottom: 1.4em;
+      font-weight: 300;
+    }
+ 
+    .letter-body p em {
+      font-style: italic;
+      color: var(--deep-rose);
+    }
+ 
+    .letter-signature {
+      margin-top: 2em;
+      text-align: right;
+    }
+ 
+    .letter-signature .closing {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.2rem;
+      color: var(--ink-light);
+      display: block;
+      margin-bottom: 0.4em;
+    }
+ 
+    .letter-signature .name {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--burgundy);
+      display: block;
+    }
+ 
+    .letter-hearts {
+      text-align: center;
+      font-size: 1.4rem;
+      margin: 2em 0 1em;
+      letter-spacing: 0.5em;
+      opacity: 0.6;
+    }
+ 
+    /* CTA Button */
+    .btn-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 2.8rem;
+    }
+ 
+    .cta-btn {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.12em;
+      color: var(--warm-white);
+      background: linear-gradient(135deg, var(--deep-rose), var(--burgundy));
+      border: none;
+      padding: 1rem 2.8rem;
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 20px rgba(92,26,42,0.25);
+      text-transform: uppercase;
+    }
+ 
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+ 
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(92,26,42,0.35);
+    }
+ 
+    .cta-btn:hover::before { opacity: 1; }
+    .cta-btn:active { transform: translateY(-1px); }
+ 
+    /* Shimmer on button */
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: shimmer 3s ease infinite;
+    }
+ 
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      100% { left: 200%; }
+    }
+ 
+    /* Fade-out overlay */
+    .redirect-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--warm-white);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+    }
+ 
+    .redirect-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+ 
+    /* Decorative ribbon at top */
+    .ribbon {
+      text-align: center;
+      color: var(--gold);
+      font-size: 1.3rem;
+      letter-spacing: 1.2em;
+      margin-bottom: 1.5rem;
+      opacity: 0.5;
+    }
+ 
+    /* Stagger letter content lines */
+    .letter-content > * {
+      animation: fadeInUp 0.6s ease both;
+    }
+    .letter-date       { animation-delay: 0.4s; }
+    .letter-salutation { animation-delay: 0.6s; }
+    .letter-body p:nth-child(1) { animation-delay: 0.75s; }
+    .letter-body p:nth-child(2) { animation-delay: 0.9s; }
+    .letter-body p:nth-child(3) { animation-delay: 1.05s; }
+    .letter-body p:nth-child(4) { animation-delay: 1.2s; }
+    .letter-hearts     { animation-delay: 1.35s; }
+    .letter-signature  { animation-delay: 1.5s; }
+ 
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+ 
+    /* Mobile */
+    @media (max-width: 520px) {
+      .letter { padding: 3rem 1.5rem 2.5rem; }
+      .letter::before { left: 3rem; }
+    }
+  </style>
+</head>
+<body>
+ 
+  <div class="petals-bg" id="petals"></div>
+ 
+  <div class="page-wrapper">
+ 
+    <header class="page-header">
+      <p class="tagline">💌 uma carta para o seu coração</p>
+      <h1>Carta de Amor</h1>
+    </header>
+ 
+    <div class="ribbon">— ✦ —</div>
+ 
+    <div class="letter">
+      <div class="wax-seal">❤️</div>
+ 
+      <div class="letter-content">
+        <p class="letter-date">30 de Março de 2026</p>
+ 
+        <p class="letter-salutation">Meu amor,</p>
+ 
+        <div class="letter-body">
+          <p>
+            Existem coisas que a gente sente mas tem dificuldade de colocar em palavras — e você é uma delas. Desde que você chegou, tudo ao meu redor ficou mais leve, mais bonito, mais cheio de sentido.
+          </p>
+          <p>
+            Eu percebo você em cada detalhe pequeno do dia: no jeito que o sol entra pela manhã, no cheiro do café, no silêncio que de repente deixou de ser vazio. <em>Você preencheu espaços que eu nem sabia que existiam.</em>
+          </p>
+          <p>
+            Não é que eu não consiga viver sem você — é que, com você, eu vivo muito mais. Cada conversa, cada risada, cada olhar em silêncio: esses momentos viraram o melhor do meu dia, todo dia.
+          </p>
+          <p>
+            Por isso, com o coração na mão e um sorriso que você com certeza já imagina, quero te fazer uma pergunta — a mais importante que já fiz. Leia devagar, com calma, como se cada palavra fosse um abraço. 💛
+          </p>
+        </div>
+ 
+        <div class="letter-hearts">❤ ♡ ❤</div>
+ 
+        <div class="letter-signature">
+          <span class="closing">Com todo o meu carinho,</span>
+          <span class="name">Quem te ama 🌹</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="btn-wrapper">
+      <button class="cta-btn" id="nextBtn">Ler a pergunta &nbsp;→</button>
+    </div>
+ 
+  </div>
+ 
+  <div class="redirect-overlay" id="overlay"></div>
+ 
+  <script>
+    /* Petals */
+    const petalContainer = document.getElementById('petals');
+    const symbols = ['🌸','🌹','✿','❀'];
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('span');
+      p.className = 'petal';
+      p.textContent = symbols[i % symbols.length];
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (7 + Math.random() * 8) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
+      p.style.fontSize = (0.7 + Math.random() * 0.7) + 'rem';
+      petalContainer.appendChild(p);
+    }
+ 
+    /* Navigate to proposal */
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('visible');
+      setTimeout(() => { window.location.href = 'proposta.html'; }, 800);
+    });
+  </script>
+</body>
+</html>
