@@ -92,7 +92,7 @@
     .letter {
       background: var(--warm-white);
       border-radius: 2px;
-      padding: 3.5rem 3rem 3rem;
+      padding: 3.5rem 3rem 3rem 5rem;
       position: relative;
       box-shadow:
         0 4px 6px rgba(92,26,42,0.06),
@@ -104,7 +104,7 @@
     .letter::after {
       content: '';
       position: absolute;
-      inset: 3.5rem 3rem 3rem;
+      inset: 3.5rem 3rem 3rem 5rem;
       background-image: repeating-linear-gradient(
         to bottom,
         transparent,
@@ -313,7 +313,7 @@
  
     /* Mobile */
     @media (max-width: 520px) {
-      .letter { padding: 3rem 1.5rem 2.5rem; }
+      .letter { padding: 3rem 1.5rem 2.5rem 4rem; }
       .letter::before { left: 3rem; }
     }
   </style>
